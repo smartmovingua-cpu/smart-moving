@@ -126,7 +126,6 @@ ${formData.description || 'Немає опису'}
   };
 
   const triggerDatePicker = (e) => {
-    // Prevent triggering showPicker if clicked directly on input (native click handles it)
     if (e.target.tagName === 'INPUT') return;
     const container = e.currentTarget;
     const input = container.querySelector('input[type="date"]');
@@ -283,13 +282,13 @@ ${formData.description || 'Немає опису'}
                 </div>
               </div>
 
-              {/* Interactive Calendar Date Picker Only */}
-              <div>
+              {/* Interactive Calendar Date Picker Only - Guaranteed no mobile overflow */}
+              <div className="w-full min-w-0 max-w-full">
                 <label className="block text-xs font-semibold text-slate-300 mb-1">
                   Оберіть дату виконання замовлення <span className="text-amber-400">*</span>
                 </label>
                 <div
-                  className="relative cursor-pointer group w-full"
+                  className="relative cursor-pointer group w-full min-w-0 max-w-full overflow-hidden"
                   onClick={triggerDatePicker}
                 >
                   <Calendar className="absolute left-3.5 top-3.5 w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform pointer-events-none z-10" />
@@ -299,7 +298,7 @@ ${formData.description || 'Немає опису'}
                     min={todayStr}
                     value={formData.date}
                     onChange={handleChange}
-                    className="w-full h-12 block max-w-full overflow-hidden box-border bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-3 text-base sm:text-sm text-white focus:outline-none focus:border-amber-500 transition-colors font-medium cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-80 hover:[&::-webkit-calendar-picker-indicator]:opacity-100"
+                    className="w-full h-12 block min-w-0 max-w-full overflow-hidden box-border bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-3 text-base sm:text-sm text-white focus:outline-none focus:border-amber-500 transition-colors font-medium cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-80 hover:[&::-webkit-calendar-picker-indicator]:opacity-100"
                   />
                 </div>
               </div>

@@ -9,6 +9,23 @@
   }
 }
 
+/* Mobile input[type="date"] overflow fix for iOS Safari & Android Chrome */
+input[type="date"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+input[type="date"]::-webkit-date-and-time-value {
+  text-align: left;
+  line-height: inherit;
+  min-height: 1.2em;
+}
+
 /* Custom scrollbars & glassmorphism utilities */
 ::-webkit-scrollbar {
   width: 8px;
