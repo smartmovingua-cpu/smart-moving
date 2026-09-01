@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { siteConfig } from '../config/siteConfig';
 import PhoneInputCustom from './PhoneInputCustom';
-import { User, MapPin, Tag, Truck, CheckCircle2, Send, MessageCircle, Calendar, Clock } from 'lucide-react';
+import { User, MapPin, Tag, Truck, CheckCircle2, Send, MessageCircle, Calendar } from 'lucide-react';
 
 export default function QuickOrderSection() {
   const todayStr = new Date().toISOString().split('T')[0];
@@ -13,32 +13,11 @@ export default function QuickOrderSection() {
     transport: siteConfig.transportOptions[0].title,
     address: '',
     date: todayStr,
-    time: '12:00 (День)',
     description: ''
   });
 
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState({ loading: false, success: false, error: '' });
-
-  const timeOptions24h = [
-    "Терміново (протягом 30-45 хв)",
-    "08:00 (Ранок)",
-    "09:00 (Ранок)",
-    "10:00 (Ранок)",
-    "11:00 (Ранок)",
-    "12:00 (День)",
-    "13:00 (День)",
-    "14:00 (День)",
-    "15:00 (День)",
-    "16:00 (День)",
-    "17:00 (Вечір)",
-    "18:00 (Вечір)",
-    "19:00 (Вечір)",
-    "20:00 (Вечір)",
-    "21:00 (Ніч)",
-    "22:00 (Ніч)",
-    "00:00 - 07:00 (Нічна зміна 24/7)"
-  ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -87,7 +66,6 @@ export default function QuickOrderSection() {
       address: formData.address || 'Не вказано (Львів)',
       street: formData.address || 'Не вказано (Львів)',
       date: formData.date,
-      time: formData.time,
       description: formData.description || 'Немає опису',
       comments: formData.description || 'Немає опису'
     };
@@ -118,7 +96,6 @@ export default function QuickOrderSection() {
 🚚 **Вантажне авто:** ${formData.transport} (${selectedTransportObj.price})
 
 📅 **Дата виконання:** ${formData.date}
-⏰ **Час прибуття (24h):** ${formData.time}
 ──────────────────────────────
 📝 **КОМЕНТАР:**
 ${formData.description || 'Немає опису'}
@@ -277,7 +254,7 @@ ${formData.description || 'Немає опису'}
               {/* Street / Address */}
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1">
-                  Вулиця та адреса у Львові або області <span className="text-amber-400">*</span>
+                  Вулиця та адреса у Львові або області
                 </label>
                 <div className="relative">
                   <MapPin className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-500" />
@@ -292,46 +269,30 @@ ${formData.description || 'Немає опису'}
                 </div>
               </div>
 
-              {/* Enhanced Calendar Date & 24h Time Picker */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Date Picker with Calendar Icon */}
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    Оберіть дату замовлення
-                  </label>
-                  <div className="relative">
-                    <Calendar className="absolute left-3.5 top-3.5 w-4 h-4 text-amber-400" />
-                    <input
-                      type="date"
-                      name="date"
-                      min={todayStr}
-                      value={formData.date}
-                      onChange={handleChange}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-amber-500 transition-colors font-medium cursor-pointer"
-                    />
-                  </div>
-                </div>
-
-                {/* 24-Hour Format Time Slot Select */}
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    Час прибуття (Формат 24h)
-                  </label>
-                  <div className="relative">
-                    <Clock className="absolute left-3.5 top-3.5 w-4 h-4 text-emerald-400" />
-                    <select
-                      name="time"
-                      value={formData.time}
-                      onChange={handleChange}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-amber-500 transition-colors font-medium cursor-pointer"
-                    >
-                      {timeOptions24h.map((t) => (
-                        <option key={t} value={t}>
-                          {t}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+              {/* Interactive Calendar Date Picker Only */}
+              <div>
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  Оберіть дату виконання замовлення <span className="text-amber-400">*</span>
+                </label>
+                <div
+                  className="relative cursor-pointer group"
+                  onClick={(e) => {
+                    const input = e.currentTarget.querySelector('input');
+                    if (input && input.showPicker) input.showPicker();
+                  }}
+                >
+                  <Calendar className="absolute left-3.5 top-3.5 w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform pointer-events-none" />
+                  <input
+                    type="date"
+                    name="date"
+                    min={todayStr}
+                    value={formData.date}
+                    onChange={handleChange}
+                    onClick={(e) => {
+                      if (e.target.showPicker) e.target.showPicker();
+                    }}
+                    className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-amber-500 transition-colors font-medium cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-80 hover:[&::-webkit-calendar-picker-indicator]:opacity-100"
+                  />
                 </div>
               </div>
 

@@ -3,7 +3,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { name, category, service, car, transport, address, street, phone, date, time, comments, description } = req.body || {};
+  const { name, category, service, car, transport, address, street, phone, date, comments, description } = req.body || {};
 
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_CHAT_ID;
@@ -18,7 +18,6 @@ export default async function handler(req, res) {
   const userPhone = phone || 'Не вказано';
   const userAddress = address || street || 'Не вказано (Львів)';
   const userDate = date || 'Сьогодні / Терміново';
-  const userTime = time || 'Найближчий час (24/7)';
   const userComments = comments || description || 'Без додаткових приміток';
 
   const text = `🚨 **НОВЕ ЗАМОВЛЕННЯ — SMART MOVING ЛЬВІВ** 🚨
@@ -31,7 +30,6 @@ export default async function handler(req, res) {
 🚚 **Вантажне авто:** ${selectedCar}
 
 📅 **Дата виконання:** ${userDate}
-⏰ **Час прибуття (24h):** ${userTime}
 ──────────────────────────────
 📝 **КОМЕНТАР ТА РОЗРАХУНОК:**
 ${userComments}
