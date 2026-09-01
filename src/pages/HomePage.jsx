@@ -9,7 +9,7 @@ import CtaBlock from '../components/CtaBlock';
 
 export default function HomePage({ onOpenOrderModal, onOpenCalculator }) {
   useEffect(() => {
-    document.title = "SMART MOVING - Вантажники та Вантажні Перевезення у Львові 24/7";
+    document.title = "Вантажники Львів | Smart Moving";
   }, []);
 
   return (
