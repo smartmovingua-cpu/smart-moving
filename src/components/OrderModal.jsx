@@ -9,8 +9,8 @@ export default function OrderModal({ isOpen, onClose, initialService = '', initi
   const [formData, setFormData] = useState({
     name: '',
     phone: '+380',
-    service: siteConfig.services[0].title,
-    transport: siteConfig.transportOptions[0].title,
+    service: (siteConfig.services && siteConfig.services[0]?.title) || 'Вантажники Львів',
+    transport: (siteConfig.transportOptions && siteConfig.transportOptions[0]?.title) || 'Без автомобіля (тільки вантажники)',
     address: '',
     date: todayStr,
     description: ''
@@ -18,6 +18,18 @@ export default function OrderModal({ isOpen, onClose, initialService = '', initi
 
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState({ loading: false, success: false, error: '' });
+
+  // Disable background scrolling when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
 
   // Default comment templates per service category
   const getDefaultCommentForService = (serviceTitle) => {
@@ -54,8 +66,8 @@ export default function OrderModal({ isOpen, onClose, initialService = '', initi
   // Sync state when modal opens or initialService / contextState changes
   useEffect(() => {
     if (isOpen) {
-      let initialSvc = siteConfig.services[0].title;
-      let initialTrp = siteConfig.transportOptions[0].title;
+      let initialSvc = (siteConfig.services && siteConfig.services[0]?.title) || 'Вантажники Львів';
+      let initialTrp = (siteConfig.transportOptions && siteConfig.transportOptions[0]?.title) || 'Без автомобіля (тільки вантажники)';
       let initialDesc = '';
 
       if (initialContextState) {
@@ -67,16 +79,16 @@ export default function OrderModal({ isOpen, onClose, initialService = '', initi
           initialDesc = getDefaultCommentForService(initialSvc);
         }
       } else if (initialService) {
-        const matchedVehicle = siteConfig.fleet.find(
+        const matchedVehicle = (siteConfig.fleet || []).find(
           (v) => v.name.toLowerCase() === initialService.toLowerCase() || initialService.toLowerCase().includes(v.name.toLowerCase())
         );
         if (matchedVehicle) {
           initialSvc = "Вантажні перевезення";
-          const matchedTrpOption = siteConfig.transportOptions.find(t => t.title.toLowerCase().includes(matchedVehicle.name.toLowerCase().split(' ')[0])) || siteConfig.transportOptions[2];
+          const matchedTrpOption = (siteConfig.transportOptions || []).find(t => t.title.toLowerCase().includes(matchedVehicle.name.toLowerCase().split(' ')[0])) || siteConfig.transportOptions[2];
           initialTrp = matchedTrpOption.title;
           initialDesc = `Замовлення автомобіля: ${matchedVehicle.name}. Потрібна доставка вантажу po Львову/області.`;
         } else {
-          const matchedSvc = siteConfig.services.find(
+          const matchedSvc = (siteConfig.services || []).find(
             (s) => s.title.toLowerCase() === initialService.toLowerCase() || initialService.toLowerCase().includes(s.title.toLowerCase())
           );
           if (matchedSvc) {
@@ -143,8 +155,8 @@ export default function OrderModal({ isOpen, onClose, initialService = '', initi
     return Object.keys(newErrors).length === 0;
   };
 
-  const selectedServiceObj = siteConfig.services.find(s => s.title === formData.service) || siteConfig.services[0];
-  const selectedTransportObj = siteConfig.transportOptions.find(t => t.title === formData.transport) || siteConfig.transportOptions[0];
+  const selectedServiceObj = (siteConfig.services || []).find(s => s.title === formData.service) || siteConfig.services[0];
+  const selectedTransportObj = (siteConfig.transportOptions || []).find(t => t.title === formData.transport) || siteConfig.transportOptions[0];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -155,10 +167,10 @@ export default function OrderModal({ isOpen, onClose, initialService = '', initi
     const payload = {
       name: formData.name,
       phone: formData.phone,
-      service: `${formData.service} (${selectedServiceObj.price})`,
-      category: `${formData.service} (${selectedServiceObj.price})`,
-      transport: `${formData.transport} (${selectedTransportObj.price})`,
-      car: `${formData.transport} (${selectedTransportObj.price})`,
+      service: `${formData.service} (${selectedServiceObj?.price || ''})`,
+      category: `${formData.service} (${selectedServiceObj?.price || ''})`,
+      transport: `${formData.transport} (${selectedTransportObj?.price || ''})`,
+      car: `${formData.transport} (${selectedTransportObj?.price || ''})`,
       address: formData.address || 'Не вказано (Львів)',
       street: formData.address || 'Не вказано (Львів)',
       date: formData.date,
@@ -188,8 +200,8 @@ export default function OrderModal({ isOpen, onClose, initialService = '', initi
 📞 **Телефон:** ${formData.phone}
 📍 **Вулиця / Адреса:** ${formData.address || 'Не вказано (Львів)'}
 
-🛠 **Послуга / Вид робіт:** ${formData.service} (${selectedServiceObj.price})
-🚚 **Вантажне авто:** ${formData.transport} (${selectedTransportObj.price})
+🛠 **Послуга / Вид робіт:** ${formData.service} (${selectedServiceObj?.price || ''})
+🚚 **Вантажне авто:** ${formData.transport} (${selectedTransportObj?.price || ''})
 
 📅 **Дата виконання:** ${formData.date}
 ──────────────────────────────
@@ -225,6 +237,20 @@ ${formData.description || 'Без додаткових приміток'}
   const resetAndClose = () => {
     setStatus({ loading: false, success: false, error: '' });
     onClose();
+  };
+
+  const triggerDatePicker = (e) => {
+    // Prevent triggering showPicker if clicked directly on input (native click handles it)
+    if (e.target.tagName === 'INPUT') return;
+    const container = e.currentTarget;
+    const input = container.querySelector('input[type="date"]');
+    if (input && typeof input.showPicker === 'function') {
+      try {
+        input.showPicker();
+      } catch (err) {
+        // Silently ignore if browser blocks programmatic invocation
+      }
+    }
   };
 
   return (
@@ -275,7 +301,7 @@ ${formData.description || 'Без додаткових приміток'}
               <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 text-left space-y-2 text-xs">
                 <div className="flex items-center justify-between text-slate-400 border-b border-slate-800/80 pb-2">
                   <span>Обрана послуга:</span>
-                  <span className="font-bold text-amber-400">{formData.service} ({selectedServiceObj.price})</span>
+                  <span className="font-bold text-amber-400">{formData.service} ({selectedServiceObj?.price || ''})</span>
                 </div>
                 <div className="flex items-center justify-between text-slate-400 border-b border-slate-800/80 pb-2">
                   <span>Вантажне авто:</span>
@@ -325,14 +351,14 @@ ${formData.description || 'Без додаткових приміток'}
                   <span className="text-slate-400 flex items-center gap-1.5">
                     <Tag className="w-3.5 h-3.5 text-amber-400" /> Тариф послуги:
                   </span>
-                  <span className="font-extrabold text-amber-400">{selectedServiceObj.price}</span>
+                  <span className="font-extrabold text-amber-400">{selectedServiceObj?.price}</span>
                 </div>
 
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-slate-400 flex items-center gap-1.5">
                     <Truck className="w-3.5 h-3.5 text-emerald-400" /> Тариф транспорту:
                   </span>
-                  <span className="font-extrabold text-emerald-400">{selectedTransportObj.price}</span>
+                  <span className="font-extrabold text-emerald-400">{selectedTransportObj?.price}</span>
                 </div>
               </div>
 
@@ -347,7 +373,7 @@ ${formData.description || 'Без додаткових приміток'}
                   onChange={handleChange}
                   className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white font-medium focus:outline-none focus:border-amber-500 transition-colors"
                 >
-                  {siteConfig.services.map((s) => (
+                  {(siteConfig.services || []).map((s) => (
                     <option key={s.id} value={s.title}>
                       {s.title} — ({s.price})
                     </option>
@@ -366,7 +392,7 @@ ${formData.description || 'Без додаткових приміток'}
                   onChange={handleChange}
                   className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white font-medium focus:outline-none focus:border-amber-500 transition-colors"
                 >
-                  {siteConfig.transportOptions.map((t) => (
+                  {(siteConfig.transportOptions || []).map((t) => (
                     <option key={t.id} value={t.title}>
                       {t.title} — ({t.price})
                     </option>
@@ -432,23 +458,17 @@ ${formData.description || 'Без додаткових приміток'}
                   Оберіть дату виконання замовлення <span className="text-amber-400">*</span>
                 </label>
                 <div
-                  className="relative cursor-pointer group"
-                  onClick={(e) => {
-                    const input = e.currentTarget.querySelector('input');
-                    if (input && input.showPicker) input.showPicker();
-                  }}
+                  className="relative cursor-pointer group w-full"
+                  onClick={triggerDatePicker}
                 >
-                  <Calendar className="absolute left-3 top-3 w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform pointer-events-none" />
+                  <Calendar className="absolute left-3 top-3 w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform pointer-events-none z-10" />
                   <input
                     type="date"
                     name="date"
                     min={todayStr}
                     value={formData.date}
                     onChange={handleChange}
-                    onClick={(e) => {
-                      if (e.target.showPicker) e.target.showPicker();
-                    }}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-3 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-amber-500 transition-colors font-medium cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-80 hover:[&::-webkit-calendar-picker-indicator]:opacity-100"
+                    className="w-full h-11 block max-w-full overflow-hidden box-border bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-3 py-2 text-base sm:text-sm text-white focus:outline-none focus:border-amber-500 transition-colors font-medium cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-80 hover:[&::-webkit-calendar-picker-indicator]:opacity-100"
                   />
                 </div>
               </div>
@@ -461,7 +481,7 @@ ${formData.description || 'Без додаткових приміток'}
                 </label>
                 <textarea
                   name="description"
-                  rows="5"
+                  rows="4"
                   placeholder="Опишіть ваше завдання..."
                   value={formData.description}
                   onChange={handleChange}
