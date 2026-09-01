@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { siteConfig } from '../config/siteConfig';
 import PhoneInputCustom from './PhoneInputCustom';
-import { X, Send, Phone, CheckCircle2, Clock, MapPin, User, Tag, Sparkles, Truck, ShieldCheck, MessageCircle } from 'lucide-react';
+import { X, Send, Phone, CheckCircle2, Clock, MapPin, User, Tag, Sparkles, Truck, ShieldCheck, MessageCircle, Calendar } from 'lucide-react';
 
 export default function OrderModal({ isOpen, onClose, initialService = '', initialContextState = null }) {
   const todayStr = new Date().toISOString().split('T')[0];
@@ -19,6 +19,26 @@ export default function OrderModal({ isOpen, onClose, initialService = '', initi
 
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState({ loading: false, success: false, error: '' });
+
+  const timeOptions24h = [
+    "Терміново (протягом 30-45 хв)",
+    "08:00 (Ранок)",
+    "09:00 (Ранок)",
+    "10:00 (Ранок)",
+    "11:00 (Ранок)",
+    "12:00 (День)",
+    "13:00 (День)",
+    "14:00 (День)",
+    "15:00 (День)",
+    "16:00 (День)",
+    "17:00 (Вечір)",
+    "18:00 (Вечір)",
+    "19:00 (Вечір)",
+    "20:00 (Вечір)",
+    "21:00 (Ніч)",
+    "22:00 (Ніч)",
+    "00:00 - 07:00 (Нічна зміна 24/7)"
+  ];
 
   // Default comment templates per service category
   const getDefaultCommentForService = (serviceTitle) => {
@@ -101,7 +121,7 @@ export default function OrderModal({ isOpen, onClose, initialService = '', initi
         transport: initialTrp,
         address: '',
         date: todayStr,
-        time: '12:00',
+        time: '12:00 (День)',
         description: initialDesc
       });
       setErrors({});
@@ -162,6 +182,7 @@ export default function OrderModal({ isOpen, onClose, initialService = '', initi
       transport: `${formData.transport} (${selectedTransportObj.price})`,
       car: `${formData.transport} (${selectedTransportObj.price})`,
       address: formData.address || 'Не вказано (Львів)',
+      street: formData.address || 'Не вказано (Львів)',
       date: formData.date,
       time: formData.time,
       description: formData.description || 'Без додаткових приміток',
@@ -184,17 +205,22 @@ export default function OrderModal({ isOpen, onClose, initialService = '', initi
       // 2. Direct Telegram Bot API fallback if configured on client side
       if (siteConfig.telegramBot.enabled && siteConfig.telegramBot.botToken !== "YOUR_TELEGRAM_BOT_TOKEN_HERE") {
         const messageText = `
-📦 **НОВЕ ЗАМОВЛЕННЯ (SMART MOVING ЛЬВІВ)**
-👤 **Ім'я:** ${formData.name}
+🚨 **НОВЕ ЗАМОВЛЕННЯ — SMART MOVING ЛЬВІВ** 🚨
+──────────────────────────────
+👤 **Клієнт:** ${formData.name}
 📞 **Телефон:** ${formData.phone}
-🛠 **Послуга:** ${formData.service} (${selectedServiceObj.price})
-🚚 **Транспорт:** ${formData.transport} (${selectedTransportObj.price})
-📍 **Адреса:** ${formData.address || 'Не вказано (Львів)'}
-📅 **Дата:** ${formData.date}
-⏰ **Час:** ${formData.time}
+📍 **Вулиця / Адреса:** ${formData.address || 'Не вказано (Львів)'}
 
+🛠 **Послуга / Вид робіт:** ${formData.service} (${selectedServiceObj.price})
+🚚 **Вантажне авто:** ${formData.transport} (${selectedTransportObj.price})
+
+📅 **Дата виконання:** ${formData.date}
+⏰ **Час прибуття (24h):** ${formData.time}
+──────────────────────────────
 📝 **КОМЕНТАР ТА РОЗРАХУНОК:**
 ${formData.description || 'Без додаткових приміток'}
+──────────────────────────────
+⚡ *Служба вантажних перевезень Smart Moving*
         `.trim();
 
         await fetch(
@@ -275,9 +301,13 @@ ${formData.description || 'Без додаткових приміток'}
                   <span>Обрана послуга:</span>
                   <span className="font-bold text-amber-400">{formData.service} ({selectedServiceObj.price})</span>
                 </div>
-                <div className="flex items-center justify-between text-slate-400">
+                <div className="flex items-center justify-between text-slate-400 border-b border-slate-800/80 pb-2">
                   <span>Вантажне авто:</span>
                   <span className="font-bold text-emerald-400">{formData.transport}</span>
+                </div>
+                <div className="flex items-center justify-between text-slate-400">
+                  <span>Вулиця / Адреса:</span>
+                  <span className="font-bold text-white">{formData.address || 'м. Львів'}</span>
                 </div>
               </div>
 
@@ -402,17 +432,17 @@ ${formData.description || 'Без додаткових приміток'}
                 </div>
               </div>
 
-              {/* Address */}
+              {/* Street & Address Input */}
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1">
-                  Адреса роботи у Львові або області
+                  Вулиця та адреса у Львові або області <span className="text-amber-400">*</span>
                 </label>
                 <div className="relative">
                   <MapPin className="absolute left-3 top-3 w-4 h-4 text-slate-500" />
                   <input
                     type="text"
                     name="address"
-                    placeholder="Район / вул. Франка / Львівська обл."
+                    placeholder="вул. Городоцька, 15 / Франка / смт Брюховичі"
                     value={formData.address}
                     onChange={handleChange}
                     className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-3 py-2.5 text-xs sm:text-sm text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 transition-colors"
@@ -420,33 +450,46 @@ ${formData.description || 'Без додаткових приміток'}
                 </div>
               </div>
 
-              {/* Native Date & Time Pickers */}
+              {/* Enhanced Calendar Date & 24h Time Picker */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {/* Date Picker with Calendar Icon */}
                 <div>
                   <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    Оберіть дату
+                    Оберіть дату замовлення
                   </label>
-                  <input
-                    type="date"
-                    name="date"
-                    min={todayStr}
-                    value={formData.date}
-                    onChange={handleChange}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-amber-500 transition-colors"
-                  />
+                  <div className="relative">
+                    <Calendar className="absolute left-3 top-3 w-4 h-4 text-amber-400" />
+                    <input
+                      type="date"
+                      name="date"
+                      min={todayStr}
+                      value={formData.date}
+                      onChange={handleChange}
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-3 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-amber-500 transition-colors font-medium cursor-pointer"
+                    />
+                  </div>
                 </div>
 
+                {/* 24-Hour Format Time Slot Select */}
                 <div>
                   <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    Оберіть час
+                    Час прибуття (Формат 24h)
                   </label>
-                  <input
-                    type="time"
-                    name="time"
-                    value={formData.time}
-                    onChange={handleChange}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-amber-500 transition-colors"
-                  />
+                  <div className="relative">
+                    <Clock className="absolute left-3 top-3 w-4 h-4 text-emerald-400" />
+                    <select
+                      name="time"
+                      value={formData.time}
+                      onChange={handleChange}
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-3 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-amber-500 transition-colors font-medium cursor-pointer"
+                    >
+                      {timeOptions24h.map((t) => (
+                        <option key={t} value={t}>
+                          {t}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
               </div>
 
