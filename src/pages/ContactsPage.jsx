@@ -1,161 +1,134 @@
 import React, { useEffect } from 'react';
 import { siteConfig } from '../config/siteConfig';
-import { Phone, Send, MessageCircle, Clock, MapPin, ShieldCheck, Mail, Building2, ShoppingBag } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock, Send, MessageCircle, ArrowRight } from 'lucide-react';
+import CtaBlock from '../components/CtaBlock';
 
 export default function ContactsPage({ onOpenOrderModal }) {
   useEffect(() => {
-    window.scrollTo(0, 0);
-    document.title = "Контакти вантажників у Львові 24/7 | НІКА (+380990821475)";
+    document.title = "Контакти вантажників у Львові 24/7 | SMART MOVING (+380990821475)";
   }, []);
 
   return (
-    <main className="pt-8 pb-16 bg-slate-950 text-slate-100 min-h-screen space-y-12">
-      <div className="max-w-7xl mx-auto px-4 space-y-12">
+    <main className="py-12 bg-slate-950 space-y-16">
+      <div className="max-w-7xl mx-auto px-4">
         
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-4">
+        <div className="text-center max-w-3xl mx-auto space-y-4 mb-12">
           <span className="text-amber-400 font-bold text-xs uppercase tracking-widest bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full">
-            Контакти 24/7
+            Контакти та Диспетчерська
           </span>
           <h1 className="text-3xl sm:text-5xl font-black text-white font-outfit uppercase">
-            ЗВ'ЯЗОК З ДИСПЕТЧЕРОМ <span className="text-gradient-amber">У ЛЬВОВІ</span>
+            ЗВ'ЯЖІТЬСЯ З НАМИ <span className="text-gradient-amber">24/7</span>
           </h1>
-          <p className="text-slate-400 text-sm sm:text-base">
-            Приймаємо замовлення та надаємо розрахунок вартості цілодобово без вихідних.
+          <p className="text-xs sm:text-sm text-slate-400">
+            Диспетчер цілодобово на зв'язку. Приймаємо термінові дзвінки та прораховуємо вартість перевезення за 2 хвилини.
           </p>
         </div>
 
-        {/* Large Contact Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
           
-          {/* Phone Numbers Box */}
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 space-y-6 shadow-2xl">
-            <div className="flex items-center gap-3">
+          {/* Phone Numbers Card */}
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 flex flex-col justify-between shadow-xl">
+            <div className="space-y-4">
               <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
                 <Phone className="w-6 h-6" />
               </div>
-              <div>
-                <h3 className="text-xl font-bold text-white font-outfit">Зателефонувати диспетчеру</h3>
-                <p className="text-xs text-slate-400">Клікабельні номери для миттєвого дзвінка</p>
+              <h3 className="text-xl font-bold text-white font-outfit">Телефони диспетчера</h3>
+              <p className="text-xs text-slate-400">Телефонуйте у будь-який час — працюємо без вихідних:</p>
+              
+              <div className="space-y-3 pt-2">
+                {(siteConfig.phones || []).map((phone, idx) => (
+                  <a
+                    key={idx}
+                    href={`tel:${phone.raw}`}
+                    className="flex items-center justify-between p-3.5 rounded-xl bg-slate-950 border border-slate-800 hover:border-amber-500/50 transition-colors group"
+                  >
+                    <span className="text-sm font-bold text-white group-hover:text-amber-400 transition-colors">{phone.display}</span>
+                    <span className="text-[10px] text-amber-400 font-extrabold uppercase bg-amber-500/10 px-2 py-0.5 rounded">Дзвінок</span>
+                  </a>
+                ))}
               </div>
             </div>
 
-            <div className="space-y-3 pt-2">
-              {siteConfig.phones.map((phone) => (
+            <div className="pt-4 border-t border-slate-800 flex items-center gap-2 text-xs text-slate-400">
+              <Clock className="w-4 h-4 text-emerald-400 shrink-0" />
+              <span>Подача авто за 20-30 хв по Львову</span>
+            </div>
+          </div>
+
+          {/* Messengers Card */}
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 flex flex-col justify-between shadow-xl">
+            <div className="space-y-4">
+              <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+                <Send className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-bold text-white font-outfit">Месенджери</h3>
+              <p className="text-xs text-slate-400">Надішліть фото або відео вантажу для точного розрахунку:</p>
+
+              <div className="space-y-3 pt-2">
                 <a
-                  key={phone.raw}
-                  href={`tel:${phone.raw}`}
-                  className="flex items-center justify-between bg-slate-950 hover:bg-amber-500 hover:text-slate-950 text-white font-black text-xl p-4 rounded-2xl border border-slate-800 hover:border-amber-400 transition-all duration-300 group shadow-md"
+                  href={siteConfig.messengers.telegram}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center justify-between p-3.5 rounded-xl bg-sky-600/10 border border-sky-500/30 hover:bg-sky-600/20 transition-colors group"
                 >
-                  <span className="flex items-center gap-3">
-                    <Phone className="w-5 h-5 text-amber-400 group-hover:text-slate-950" />
-                    {phone.display}
+                  <span className="text-sm font-bold text-sky-400 flex items-center gap-2">
+                    <Send className="w-4 h-4" /> Telegram
                   </span>
-                  <span className="text-xs font-bold uppercase tracking-wider bg-slate-900 group-hover:bg-slate-950 text-amber-400 group-hover:text-amber-300 px-3 py-1 rounded-xl">
-                    Дзвінок
-                  </span>
+                  <span className="text-xs text-sky-400 font-semibold">@Oleksandrovych26 ➔</span>
                 </a>
-              ))}
+
+                <a
+                  href={siteConfig.messengers.viber}
+                  className="flex items-center justify-between p-3.5 rounded-xl bg-purple-600/10 border border-purple-500/30 hover:bg-purple-600/20 transition-colors group"
+                >
+                  <span className="text-sm font-bold text-purple-400 flex items-center gap-2">
+                    <MessageCircle className="w-4 h-4" /> Viber
+                  </span>
+                  <span className="text-xs text-purple-400 font-semibold">+380 99 082 14 75 ➔</span>
+                </a>
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-slate-800 flex items-center gap-2 text-xs text-slate-400">
+              <Mail className="w-4 h-4 text-amber-400 shrink-0" />
+              <span>Відповідаємо у чаті за 1-2 хвилини</span>
+            </div>
+          </div>
+
+          {/* Location & Coverage Card */}
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 flex flex-col justify-between shadow-xl">
+            <div className="space-y-4">
+              <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+                <MapPin className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-bold text-white font-outfit">Географія та Базування</h3>
+              <p className="text-xs text-slate-400">Обслуговуємо місто Львів та уся область:</p>
+
+              <div className="space-y-2 text-xs text-slate-300 bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                <p className="font-bold text-amber-400">📍 Райони Львова:</p>
+                <p className="text-slate-400 leading-relaxed">
+                  Галицький, Франківський, Сихівський, Личаківський, Шевченківський, Залізничний.
+                </p>
+                <p className="font-bold text-amber-400 pt-2">📍 Область:</p>
+                <p className="text-slate-400 leading-relaxed">
+                  Брюховичі, Винники, Зимна Вода, Сокільники, Стрий, Дрогобич, Самбір, Червоноград, Жовква та ін.
+                </p>
+              </div>
             </div>
 
             <button
               onClick={() => onOpenOrderModal()}
-              className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider py-3.5 rounded-xl shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 transition-all hover:scale-[1.01] active:scale-95"
+              className="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider py-3.5 rounded-xl shadow-lg shadow-amber-500/20 transition-all active:scale-95"
             >
-              <ShoppingBag className="w-4 h-4 stroke-[2.5]" />
-              Оформити онлайн замовлення
+              Замовити виїзд вантажників
             </button>
-
-            <div className="text-xs text-slate-400 flex items-center gap-2 pt-2">
-              <Clock className="w-4 h-4 text-amber-400 shrink-0" />
-              <span>Диспетчери на зв'язку 24/7/365</span>
-            </div>
           </div>
 
-          {/* Messengers Box */}
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 space-y-6 shadow-2xl">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400">
-                <Send className="w-6 h-6" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-white font-outfit">Написати в Месенджери</h3>
-                <p className="text-xs text-slate-400">Прямий перехід у чат без збереження номера</p>
-              </div>
-            </div>
-
-            <div className="space-y-3 pt-2">
-              <a
-                href={siteConfig.messengers.telegram}
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center justify-between bg-sky-950/40 hover:bg-sky-600 hover:text-white text-sky-400 font-bold text-base p-4 rounded-2xl border border-sky-800/50 transition-all duration-300 group shadow-md"
-              >
-                <span className="flex items-center gap-3">
-                  <Send className="w-5 h-5" />
-                  НАПИСАТИ В TELEGRAM
-                </span>
-                <span className="text-xs bg-sky-900/60 group-hover:bg-white/20 text-sky-200 px-3 py-1 rounded-xl">
-                  Перейти в Чат
-                </span>
-              </a>
-
-              <a
-                href={siteConfig.messengers.viber}
-                className="flex items-center justify-between bg-purple-950/40 hover:bg-purple-600 hover:text-white text-purple-400 font-bold text-base p-4 rounded-2xl border border-purple-800/50 transition-all duration-300 group shadow-md"
-              >
-                <span className="flex items-center gap-3">
-                  <MessageCircle className="w-5 h-5" />
-                  НАПИСАТИ У VIBER
-                </span>
-                <span className="text-xs bg-purple-900/60 group-hover:bg-white/20 text-purple-200 px-3 py-1 rounded-xl">
-                  Перейти в Чат
-                </span>
-              </a>
-            </div>
-
-            <div className="text-xs text-slate-400 flex items-center gap-2 pt-2">
-              <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span>Швидка відповідь протягом 2-5 хвилин</span>
-            </div>
-          </div>
-
-        </div>
-
-        {/* Location & Coverage Map Banner */}
-        <div className="bg-slate-900/60 border border-slate-800 rounded-3xl p-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="space-y-2">
-            <span className="text-xs font-bold text-amber-400 uppercase">Локація та геолокація</span>
-            <h4 className="text-lg font-bold text-white font-outfit flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-amber-400" /> Львів та Львівська область
-            </h4>
-            <p className="text-xs text-slate-400">
-              Працюємо в усіх районах Львова (Галицький, Франківський, Сихівський, Личаківський, Шевченківський, Залізничний) та по області.
-            </p>
-          </div>
-
-          <div className="space-y-2">
-            <span className="text-xs font-bold text-amber-400 uppercase">Графік роботи</span>
-            <h4 className="text-lg font-bold text-white font-outfit flex items-center gap-2">
-              <Clock className="w-5 h-5 text-amber-400" /> Безперервно 24/7
-            </h4>
-            <p className="text-xs text-slate-400">
-              Виконуємо нічні завантаження, виїзди у святкові та вихідні дні за стандартними тарифами.
-            </p>
-          </div>
-
-          <div className="space-y-2">
-            <span className="text-xs font-bold text-amber-400 uppercase">Робота з бізнесом</span>
-            <h4 className="text-lg font-bold text-white font-outfit flex items-center gap-2">
-              <Building2 className="w-5 h-5 text-amber-400" /> Безготівковий розрахунок
-            </h4>
-            <p className="text-xs text-slate-400">
-              Виставляємо рахунки для юридичних осіб, підписуємо договори та акти виконаних робіт.
-            </p>
-          </div>
         </div>
 
       </div>
+
+      <CtaBlock onOpenOrderModal={onOpenOrderModal} />
     </main>
   );
 }

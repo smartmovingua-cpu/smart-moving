@@ -1,50 +1,50 @@
 import React from 'react';
 import { siteConfig } from '../config/siteConfig';
-import { ShieldCheck, Award, Clock, Truck, MapPin, Zap, Calculator, CheckCircle2 } from 'lucide-react';
-
-const icons = [Award, ShieldCheck, Zap, Truck, MapPin, Clock, Calculator, CheckCircle2];
+import { ShieldCheck, Clock, Award, Headphones, Truck, Banknote } from 'lucide-react';
 
 export default function WhyUsSection() {
+  const iconMap = {
+    ShieldCheck: <ShieldCheck className="w-8 h-8 text-amber-400" />,
+    Clock: <Clock className="w-8 h-8 text-amber-400" />,
+    Award: <Award className="w-8 h-8 text-amber-400" />,
+    Headphones: <Headphones className="w-8 h-8 text-amber-400" />,
+    Truck: <Truck className="w-8 h-8 text-amber-400" />,
+    Banknote: <Banknote className="w-8 h-8 text-amber-400" />
+  };
+
   return (
-    <section className="py-20 bg-slate-950 relative">
+    <section className="py-16 bg-slate-900/60 border-y border-slate-800/80 relative">
       <div className="max-w-7xl mx-auto px-4">
         
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
+        <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
           <span className="text-amber-400 font-bold text-xs uppercase tracking-widest bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full">
             Наші переваги
           </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white font-outfit uppercase">
-            ЧОМУ КЛІЄНТИ ОБИРАЮТЬ <span className="text-gradient-amber">СЛУЖБУ НІКА</span>
+          <h2 className="text-3xl sm:text-4xl font-black text-white font-outfit uppercase">
+            ЧОМУ КЛІЄНТИ ОБИРАЮТЬ <span className="text-gradient-amber">SMART MOVING</span>
           </h2>
-          <p className="text-slate-400 text-sm sm:text-base">
-            За 8 років роботи ми зарекомендували себе як один з найідеальніших сервісів вантажників у Львові.
+          <p className="text-xs sm:text-sm text-slate-400">
+            Працюємо швидко, відповідально та дбайливо ставимося до кожного майна.
           </p>
         </div>
 
-        {/* 8 Advantages Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {siteConfig.whyChooseUs.map((item, idx) => {
-            const IconComp = icons[idx % icons.length];
-            return (
-              <div
-                key={idx}
-                className="bg-slate-900/80 border border-slate-800/90 rounded-2xl p-6 hover:border-amber-500/40 transition-all duration-300 group hover:-translate-y-1 space-y-3"
-              >
-                <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 group-hover:bg-amber-500 group-hover:text-slate-950 transition-colors">
-                  <IconComp className="w-6 h-6 stroke-[2]" />
-                </div>
-
-                <h3 className="text-lg font-bold text-white font-outfit group-hover:text-amber-400 transition-colors">
-                  {item.title}
-                </h3>
-
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  {item.desc}
-                </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {(siteConfig.whyUs || []).map((item) => (
+            <div
+              key={item.id}
+              className="bg-slate-950/80 border border-slate-800 rounded-2xl p-6 hover:border-amber-500/40 transition-all hover:-translate-y-1 shadow-lg group"
+            >
+              <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                {iconMap[item.icon] || <ShieldCheck className="w-8 h-8 text-amber-400" />}
               </div>
-            );
-          })}
+              <h3 className="text-lg font-bold text-white font-outfit mb-2 group-hover:text-amber-400 transition-colors">
+                {item.title}
+              </h3>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                {item.desc}
+              </p>
+            </div>
+          ))}
         </div>
 
       </div>
