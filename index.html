@@ -2,19 +2,125 @@
 <html lang="uk" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/jpeg" href="/cargo-company/logo.jpg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SMART MOVING - Вантажники та Вантажні Перевезення у Львові 24/7</title>
-    <meta name="description" content="SMART MOVING — Вантажники, вантажні перевезення, такелажні та складські роботи у Львові та Львівській області. Працюємо 24/7. Досвід 8 років." />
-    <meta name="keywords" content="smart moving, smart moving lviv, вантажники Львів, грузчики Львів, вантажні перевезення Львів, переїзд Львів, квартирний переїзд Львів, офісний переїзд Львів, такелажні роботи Львів, підйом вантажу на поверх Львів" />
+    
+    <!-- Disable Browser Cache for index.html to force instant updates -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <!-- Task 1: Title & Description -->
+    <title>Вантажники Львів | Smart Moving</title>
+    <meta name="description" content="Подача авто до 25 хвилин — Професійний квартирний та офісний переїзд у Львові. Маємо все необхідне обладнання та пакування. Замовляйте швидко та надійно!" />
+    <meta name="keywords" content="вантажники Львів, грузчики Львів, вантажні перевезення Львів, переїзд Львів, квартирний переїзд Львів, офісний переїзд Львів, такелажні роботи Львів, підйом вантажу на поверх Львів, Smart Moving" />
+    <meta name="author" content="Smart Moving Львів" />
+    
+    <!-- Task 2: Favicon & Open Graph (og:site_name, og:title, og:description, og:image) -->
+    <link rel="icon" type="image/jpeg" href="/cargo-company/logo.jpg" />
+    <link rel="apple-touch-icon" href="/cargo-company/logo.jpg" />
+    <meta property="og:site_name" content="Smart Moving" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Вантажники Львів | Smart Moving" />
+    <meta property="og:description" content="Подача авто до 25 хвилин — Професійний квартирний та офісний переїзд у Львові. Маємо все необхідне обладнання та пакування. Замовляйте швидко та надійно!" />
+    <meta property="og:image" content="/cargo-company/logo.jpg" />
+    <meta property="og:locale" content="uk_UA" />
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/cargo-company/assets/index-Cp8lEsD_.js"></script>
+
+    <!-- Task 3: Structured Data (JSON-LD Schema.org MovingCompany) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "MovingCompany",
+      "name": "Smart Moving",
+      "alternateName": "Smart Moving Львів",
+      "url": "https://Yurchik9.github.io/cargo-company/",
+      "logo": "https://Yurchik9.github.io/cargo-company/logo.jpg",
+      "image": "https://Yurchik9.github.io/cargo-company/logo.jpg",
+      "telephone": ["+380990821475", "+380968309014"],
+      "priceRange": "грн",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Львів",
+        "addressRegion": "Львівська область",
+        "addressCountry": "UA"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "49.8397",
+        "longitude": "24.0297"
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ],
+        "opens": "00:00",
+        "closes": "23:59"
+      },
+      "description": "Подача авто до 25 хвилин — Професійний квартирний та офісний переїзд у Львові. Маємо все необхідне обладнання та пакування. Замовляйте швидко та надійно!",
+      "areaServed": "м. Львів та Львівська область",
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Послуги вантажників та перевезень у Львові",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Вантажники Львів",
+              "description": "Професійні вантажники для будь-яких завдань. Фізична сила, акуратність та швидкість."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Квартирний переїзд",
+              "description": "Переїзд квартири під ключ. Пакування, завантаження, транспортування та розстановка."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Офісний переїзд",
+              "description": "Швидкий переїзд офісу без зупинки бізнесу. Маркування коробів, збереження оргтехніки."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Монтаж та збірка меблів",
+              "description": "Професійний монтаж та збірка будь-яких меблів: кухонь, шаф-купе, ліжок, стінок."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Такелажні роботи",
+              "description": "Переміщення та підйом особливо важких предметів (сейфи, банкомати, верстати, піаніно)."
+            }
+          }
+        ]
+      }
+    }
+    </script>
+    <script type="module" crossorigin src="/cargo-company/assets/index-D12nA3Le.js"></script>
     <link rel="stylesheet" crossorigin href="/cargo-company/assets/index-DL11a5sd.css">
   </head>
   <body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-amber-500 selection:text-slate-950 min-h-screen flex flex-col overflow-x-hidden">
-    <div id="root"></div>
+    <div id="root"></div>
   </body>
 </html>
