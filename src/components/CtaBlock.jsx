@@ -1,6 +1,7 @@
 import React from 'react';
 import { siteConfig } from '../config/siteConfig';
 import { ShoppingBag, Send, MessageCircle, Phone, Sparkles } from 'lucide-react';
+import { triggerCallConversion } from '../utils/analytics';
 
 export default function CtaBlock({ onOpenOrderModal }) {
   return (
@@ -53,6 +54,7 @@ export default function CtaBlock({ onOpenOrderModal }) {
           {/* Phone */}
           <a
             href={`tel:${siteConfig.phones[0].raw}`}
+            onClick={() => triggerCallConversion()}
             className="flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white font-bold text-sm uppercase tracking-wider py-4 px-6 rounded-xl transition-all hover:scale-105 active:scale-95"
           >
             <Phone className="w-5 h-5 text-amber-400" />

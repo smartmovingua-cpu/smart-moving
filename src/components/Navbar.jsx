@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { siteConfig } from '../config/siteConfig';
 import { Phone, Send, MessageCircle, Clock, MapPin, Menu, X, ShieldCheck } from 'lucide-react';
+import { triggerCallConversion } from '../utils/analytics';
 
 export default function Navbar({ onOpenOrderModal }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -109,6 +110,7 @@ export default function Navbar({ onOpenOrderModal }) {
           <div className="text-right">
             <a
               href={`tel:${siteConfig.phones[0].raw}`}
+              onClick={() => triggerCallConversion()}
               className="block text-sm font-bold text-white hover:text-amber-400 transition-colors flex items-center justify-end gap-1.5"
             >
               <Phone className="w-3.5 h-3.5 text-amber-400 fill-amber-400/20" />
@@ -116,6 +118,7 @@ export default function Navbar({ onOpenOrderModal }) {
             </a>
             <a
               href={`tel:${siteConfig.phones[1].raw}`}
+              onClick={() => triggerCallConversion()}
               className="block text-xs font-semibold text-slate-400 hover:text-amber-400 transition-colors"
             >
               {siteConfig.phones[1].display}
@@ -168,6 +171,7 @@ export default function Navbar({ onOpenOrderModal }) {
                 <a
                   key={phone.raw}
                   href={`tel:${phone.raw}`}
+                  onClick={() => triggerCallConversion()}
                   className="flex items-center gap-2 text-white font-bold text-base hover:text-amber-400"
                 >
                   <Phone className="w-4 h-4 text-amber-400" />

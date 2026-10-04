@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { siteConfig } from '../config/siteConfig';
 import { MapPin, Clock, Send, MessageCircle, ArrowUp, Phone } from 'lucide-react';
+import { triggerCallConversion } from '../utils/analytics';
 
 export default function Footer() {
   const scrollToTop = () => {
@@ -41,9 +42,23 @@ export default function Footer() {
                 <MapPin className="w-4 h-4 text-amber-400 shrink-0" />
                 <span>{siteConfig.location}</span>
               </div>
-              <div className="flex items-center gap-2 text-slate-300">
+              <div className="flex items-center gap-2 text-slate-300 flex-wrap">
                 <Phone className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>{siteConfig.phones[0].display} | {siteConfig.phones[1].display}</span>
+                <a
+                  href={`tel:${siteConfig.phones[0].raw}`}
+                  onClick={() => triggerCallConversion()}
+                  className="hover:text-amber-400 transition-colors font-medium"
+                >
+                  {siteConfig.phones[0].display}
+                </a>
+                <span>|</span>
+                <a
+                  href={`tel:${siteConfig.phones[1].raw}`}
+                  onClick={() => triggerCallConversion()}
+                  className="hover:text-amber-400 transition-colors font-medium"
+                >
+                  {siteConfig.phones[1].display}
+                </a>
               </div>
             </div>
 

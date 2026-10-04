@@ -15,3 +15,23 @@ export const triggerConversion = (url) => {
     }
   }
 };
+
+/**
+ * Helper to report Google Ads Click to Call conversion
+ */
+export const triggerCallConversion = (url) => {
+  if (typeof window !== 'undefined') {
+    if (typeof window.gtag_report_call_conversion === 'function') {
+      window.gtag_report_call_conversion(url);
+    } else if (typeof window.gtag === 'function') {
+      window.gtag('event', 'conversion', {
+        'send_to': 'AW-18443400112/o7_QCL7k7pAdELDnv9pE',
+        'value': 1.0,
+        'currency': 'UAH'
+      });
+      if (typeof url !== 'undefined' && url) {
+        window.location = url;
+      }
+    }
+  }
+};

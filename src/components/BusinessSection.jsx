@@ -1,6 +1,7 @@
 import React from 'react';
 import { siteConfig } from '../config/siteConfig';
 import { Building2, CheckCircle2, FileText, Users, ShieldCheck, Phone } from 'lucide-react';
+import { triggerCallConversion } from '../utils/analytics';
 
 export default function BusinessSection({ onOpenOrderModal }) {
   return (
@@ -48,6 +49,7 @@ export default function BusinessSection({ onOpenOrderModal }) {
 
                 <a
                   href={`tel:${siteConfig.phones[0].raw}`}
+                  onClick={() => triggerCallConversion()}
                   className="flex items-center gap-2 text-xs font-bold text-white hover:text-amber-400 transition-colors"
                 >
                   <Phone className="w-4 h-4 text-amber-400" />

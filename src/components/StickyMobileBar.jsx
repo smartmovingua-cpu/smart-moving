@@ -1,6 +1,7 @@
 import React from 'react';
 import { siteConfig } from '../config/siteConfig';
 import { Phone, Send, MessageCircle, ShoppingBag } from 'lucide-react';
+import { triggerCallConversion } from '../utils/analytics';
 
 export default function StickyMobileBar({ onOpenOrderModal }) {
   return (
@@ -9,6 +10,7 @@ export default function StickyMobileBar({ onOpenOrderModal }) {
         {/* Phone Button */}
         <a
           href={`tel:${siteConfig.phones[0].raw}`}
+          onClick={() => triggerCallConversion()}
           className="flex flex-col items-center justify-center py-2 px-1 rounded-xl bg-slate-900 border border-slate-800 text-amber-400 active:scale-95 transition-transform"
         >
           <Phone className="w-5 h-5 mb-0.5" />

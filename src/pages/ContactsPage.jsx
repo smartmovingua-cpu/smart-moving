@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { siteConfig } from '../config/siteConfig';
 import { Phone, Mail, MapPin, Clock, Send, MessageCircle, ArrowRight } from 'lucide-react';
 import CtaBlock from '../components/CtaBlock';
+import { triggerCallConversion } from '../utils/analytics';
 
 export default function ContactsPage({ onOpenOrderModal }) {
   useEffect(() => {
@@ -40,6 +41,7 @@ export default function ContactsPage({ onOpenOrderModal }) {
                   <a
                     key={idx}
                     href={`tel:${phone.raw}`}
+                    onClick={() => triggerCallConversion()}
                     className="flex items-center justify-between p-3.5 rounded-xl bg-slate-950 border border-slate-800 hover:border-amber-500/50 transition-colors group"
                   >
                     <span className="text-sm font-bold text-white group-hover:text-amber-400 transition-colors">{phone.display}</span>

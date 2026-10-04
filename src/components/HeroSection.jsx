@@ -2,6 +2,7 @@ import React from 'react';
 import { siteConfig } from '../config/siteConfig';
 import { Phone, Calculator, ShoppingBag, Clock, Award, CheckCircle } from 'lucide-react';
 import smartMovingBannerImg from '../assets/images/smart_moving_logo.jpg';
+import { triggerCallConversion } from '../utils/analytics';
 
 export default function HeroSection({ onOpenOrderModal, onOpenCalculator }) {
   const handleHeroOrderClick = () => {
@@ -79,6 +80,7 @@ export default function HeroSection({ onOpenOrderModal, onOpenCalculator }) {
 
               <a
                 href={`tel:${siteConfig.phones[0].raw}`}
+                onClick={() => triggerCallConversion()}
                 className="flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white font-bold text-sm uppercase tracking-wider py-4 px-6 rounded-xl transition-all hover:scale-105 active:scale-95"
               >
                 <Phone className="w-5 h-5 text-amber-400" />
