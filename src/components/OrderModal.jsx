@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { siteConfig } from '../config/siteConfig';
 import PhoneInputCustom from './PhoneInputCustom';
 import { X, Send, Phone, CheckCircle2, MapPin, User, Tag, Sparkles, Truck, Calendar, MessageCircle } from 'lucide-react';
+import { triggerConversion } from '../utils/analytics';
 
 export default function OrderModal({ isOpen, onClose, initialService = '', initialContextState = null }) {
   const todayStr = new Date().toISOString().split('T')[0];
@@ -187,6 +188,7 @@ export default function OrderModal({ isOpen, onClose, initialService = '', initi
       }).catch(() => null);
 
       if (serverlessRes && serverlessRes.ok) {
+        triggerConversion();
         setStatus({ loading: false, success: true, error: '' });
         return;
       }
@@ -225,11 +227,13 @@ ${formData.description || 'Без додаткових приміток'}
         ).catch(() => null);
       }
 
+      triggerConversion();
       setTimeout(() => {
         setStatus({ loading: false, success: true, error: '' });
       }, 300);
     } catch (err) {
       console.warn('Bot submission notice:', err);
+      triggerConversion();
       setStatus({ loading: false, success: true, error: '' });
     }
   };

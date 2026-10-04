@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { siteConfig } from '../config/siteConfig';
 import PhoneInputCustom from './PhoneInputCustom';
 import { User, MapPin, Tag, Truck, CheckCircle2, Send, MessageCircle, Calendar } from 'lucide-react';
+import { triggerConversion } from '../utils/analytics';
 
 export default function QuickOrderSection() {
   const todayStr = new Date().toISOString().split('T')[0];
@@ -79,6 +80,7 @@ export default function QuickOrderSection() {
       }).catch(() => null);
 
       if (serverlessRes && serverlessRes.ok) {
+        triggerConversion();
         setStatus({ loading: false, success: true, error: '' });
         return;
       }
@@ -117,10 +119,12 @@ ${formData.description || 'Немає опису'}
         ).catch(() => null);
       }
 
+      triggerConversion();
       setTimeout(() => {
         setStatus({ loading: false, success: true, error: '' });
       }, 300);
     } catch (err) {
+      triggerConversion();
       setStatus({ loading: false, success: true, error: '' });
     }
   };
